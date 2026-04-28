@@ -1,0 +1,16 @@
+# --- Frontend ---
+**/node_modules/
+**/dist/
+**/.angular/
+
+# --- Backend ---
+**/[Bb]in/
+**/[Oo]bj/
+**/.vs/
+**/*.user
+**/appsettings.json
+**/.slnx.cache
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
