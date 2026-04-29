@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Shopnest.Api.Data;
-using Shopnest.Api.Models;
+using ShopNest.Core.Interface;
+using ShopNest.Core.DTOs;
 
 namespace Shopnest.Api.Controllers
 {
@@ -10,27 +9,29 @@ namespace Shopnest.Api.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext _context;
+        private readonly IProductRepository _prodcontext;
 
-        public ProductsController(StoreContext context)
+        public ProductsController(IProductRepository product)
         {
-            _context = context;
+            _prodcontext = product;
         }
 
+        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Products>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _prodcontext.GetAllProductsAsync();
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<Products>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _prodcontext.GetProductByIdAsync(id);
 
             if (product == null) return NotFound();
 
-            return product;
+            return Ok(product);
         }
     }
 }
