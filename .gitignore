@@ -10,6 +10,7 @@
 **/*.user
 **/appsettings.json
 **/.slnx.cache
+**/efpt.config.json
 
 # --- OS Files ---
 .DS_Store
