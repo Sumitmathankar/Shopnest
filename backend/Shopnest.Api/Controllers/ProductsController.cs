@@ -1,36 +1,48 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Shopnest.Api.Data;
-using Shopnest.Api.Models;
+using ShopNest.Core.DTOs;
+using ShopNest.Core.Interface;
+using ShopNest.Core.IServices;
 
 namespace Shopnest.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("products/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
-        private readonly StoreContext _context;
+        private readonly IProductService _productService;
 
-        public ProductsController(StoreContext context)
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var serviceResult = await _productService.GetAllProductsAsync();
+            if (!serviceResult.IsSuccess)
+            {
+                return BadRequest(serviceResult); // Return the failure wrapper
+            }
+
+            // Pass only the data (.Result) to the helper
+            return OkResponse(serviceResult.Result, "Products retrieved successfully");
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var response = await _productService.GetProductDetailsAsync(id);
 
-            if (product == null) return NotFound();
+            if (!response.IsSuccess)
+            {
+                return NotFound(response.Errors);
+            }
 
-            return product;
+            return OkResponse(response);
         }
     }
 }

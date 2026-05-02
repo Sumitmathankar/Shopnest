@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="Shopnest.Api/Shopnest.Api.csproj" />
+  <Project Path="ShopNest.Core/ShopNest.Core.csproj" Id="613fbce0-acea-4095-be0a-e5dfc05d2b61" />
+  <Project Path="ShopNest.Infrastructure/ShopNest.Infrastructure.csproj" Id="d6b2b661-29c9-46d5-a9cf-30afc81ebd7e" />
+  <Project Path="ShopNest.Tests/ShopNest.Tests.csproj" Id="4404e820-0252-4d12-ad1d-3cd77848f878" />
 </Solution>
