@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using ShopNest.Core.DTOs;
+using ShopNest.Core.Entities;
 using ShopNest.Core.Interface;
 using ShopNest.Infrastructure.Data;
 using System;
@@ -17,34 +18,15 @@ namespace ShopNest.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Products>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.Select(p => new Products
-            {
-                ProductId = p.ProductId,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                Stock = p.Stock,
-                CategoryId = p.CategoryId,
-                CreatedAt = p.CreatedAt,
+            return await _context.Products.ToListAsync();
 
-            }).ToListAsync();
         }
 
-        public async Task<Products> GetProductByIdAsync(int productId)
+        public async Task<Product> GetProductByIdAsync(int productId)
         {
-            return await _context.Products.Where(p => p.ProductId == productId).Select(p => new Products
-
-            {
-                ProductId = p.ProductId,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                Stock = p.Stock,
-                CategoryId = p.CategoryId,
-                CreatedAt = p.CreatedAt,
-            }).FirstOrDefaultAsync();
+            return await _context.Products.FindAsync(productId);
 
         }
     }

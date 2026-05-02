@@ -1,37 +1,48 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ShopNest.Core.Interface;
 using ShopNest.Core.DTOs;
+using ShopNest.Core.Interface;
+using ShopNest.Core.IServices;
 
 namespace Shopnest.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("products/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
-        private readonly IProductRepository _prodcontext;
+        private readonly IProductService _productService;
 
-        public ProductsController(IProductRepository product)
+        public ProductsController(IProductService productService)
         {
-            _prodcontext = product;
+            _productService = productService;
         }
 
-        
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Products>>> GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
-            var products = await _prodcontext.GetAllProductsAsync();
-            return Ok(products);
+            var serviceResult = await _productService.GetAllProductsAsync();
+            if (!serviceResult.IsSuccess)
+            {
+                return BadRequest(serviceResult); // Return the failure wrapper
+            }
+
+            // Pass only the data (.Result) to the helper
+            return OkResponse(serviceResult.Result, "Products retrieved successfully");
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Products>> GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _prodcontext.GetProductByIdAsync(id);
+            var response = await _productService.GetProductDetailsAsync(id);
 
-            if (product == null) return NotFound();
+            if (!response.IsSuccess)
+            {
+                return NotFound(response.Errors);
+            }
 
-            return Ok(product);
+            return OkResponse(response);
         }
     }
 }

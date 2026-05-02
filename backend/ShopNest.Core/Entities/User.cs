@@ -19,6 +19,10 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
+    public string RefreshToken { get; set; }
+
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
