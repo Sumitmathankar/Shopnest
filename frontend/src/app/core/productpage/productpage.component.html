@@ -1,0 +1,44 @@
+<div class="product-page">
+  <header class="page-header">
+    <!-- Dynamic Title based on URL -->
+    <h1>Our {{ currentCategory | titlecase }} Collection</h1>
+
+    <!-- Sub-Filters: Only show Men/Women buttons if the current category is 'fashion' -->
+    <div class="filter-bar" *ngIf="currentCategory === 'fashion'">
+      <button [class.active]="activeSubFilter === 'all'" (click)="filterByGender('all')">All Fashion</button>
+      <button [class.active]="activeSubFilter === 'men'" (click)="filterByGender('men')">Men</button>
+      <button [class.active]="activeSubFilter === 'women'" (click)="filterByGender('women')">Women</button>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loader">
+    <p>Fetching the latest styles...</p>
+  </div>
+
+  <div class="product-grid" *ngIf="!loading">
+    <!-- Use the products array returned from your API call -->
+    <div class="product-card" *ngFor="let product of filteredProducts">
+      <div class="image-container">
+        <!-- Added a fallback image just in case -->
+        <img [src]="product.image || 'assets/placeholder.jpg'" [alt]="product.name">
+        <span class="category-tag">{{ product.category }}</span>
+      </div>
+      
+      <div class="product-info">
+        <h3>{{ product.name }}</h3>
+        <p class="price">{{ product.price | currency }}</p>
+        
+        <div class="button-group">
+          <button class="btn-cart" (click)="addToCart(product)">Add to Cart</button>
+          <button class="btn-buy" (click)="buyNow(product)">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && filteredProducts.length === 0" class="no-products">
+    <p>We couldn't find any products in the {{ currentCategory }} category.</p>
+  </div>
+</div>
