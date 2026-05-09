@@ -8,7 +8,7 @@ namespace ShopNest.Core.Interface
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<IEnumerable<Product>> GetAllProductsAsync(string filter);
         Task<Product> GetProductByIdAsync(int productId);
     }
 }

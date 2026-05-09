@@ -20,9 +20,9 @@ namespace Shopnest.Api.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts(string filter)
         {
-            var serviceResult = await _productService.GetAllProductsAsync();
+            var serviceResult = await _productService.GetAllProductsAsync(filter);
             if (!serviceResult.IsSuccess)
             {
                 return BadRequest(serviceResult); // Return the failure wrapper

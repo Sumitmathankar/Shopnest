@@ -18,9 +18,9 @@ namespace ShopNest.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync(string filter)
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.Include(p => p.Category).Where(r => r.Category.Name == filter).ToListAsync();
 
         }
 

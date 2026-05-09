@@ -18,11 +18,11 @@ namespace ShopNest.Infrastructure.Services
             _productRepository = productRepository;
         }
 
-        public async Task<ApiResponse<IEnumerable<ProductDto>>> GetAllProductsAsync()
+        public async Task<ApiResponse<IEnumerable<ProductDto>>> GetAllProductsAsync(string filter)
             {
             var response = new ApiResponse<IEnumerable<ProductDto>>();
 
-            var result = await _productRepository.GetAllProductsAsync();
+            var result = await _productRepository.GetAllProductsAsync(filter);
 
             if (result != null && result.Any())
             {
