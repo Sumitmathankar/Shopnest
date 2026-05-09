@@ -5,7 +5,7 @@ namespace ShopNest.Core.IServices
 {
     public interface IProductService
     {
-        Task<ApiResponse<IEnumerable<ProductDto>>> GetAllProductsAsync();
+        Task<ApiResponse<IEnumerable<ProductDto>>> GetAllProductsAsync(string filter);
         Task<ApiResponse<ProductDto>> GetProductDetailsAsync(int id);
     }
 }
